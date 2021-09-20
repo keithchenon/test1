@@ -44,7 +44,7 @@ public class TestA {
         System.out.println(out);
 
 
-/*       int[] num1 = {1,2,3,4,1,2,1,4,4,5,4,6};
+       int[] num1 = {1,2,3,4,1,2,1,4,4,5,4,6};
        Map<Integer, Long> out1= Arrays.stream(num1)
                                     .mapToObj(Integer::new)
                                     .collect(Collectors.groupingBy(Function.identity(),Collectors
@@ -55,7 +55,7 @@ public class TestA {
                                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                                     .limit(4)
                                     .collect(Collectors.toMap(entry->entry.getKey(), Map.Entry::getValue, (m1,m2)->m1, LinkedHashMap::new));
-       System.out.println(out1);*/
+       System.out.println(out1);
 
         //water pool calc
 /*        int[] waterPool = {0,2,4,0,2,1,2,6,1};
@@ -152,15 +152,15 @@ public class TestA {
 
 
 
-/*        int[] a1 = {1, 3,  8, -5,2};
-        BigDecimal sum2= Arrays.stream(a1)
+        int[] suma1 = {1, 3,  8, -5,2};
+        BigDecimal sum2= Arrays.stream(suma1)
                 .mapToObj(BigDecimal::new)
                 .reduce(BigDecimal.ONE, BigDecimal::multiply);
-        System.out.println("multiply result:"+ sum2);*/
+        System.out.println("multiply result:"+ sum2);
 
         // Find the maximum repeating character
-/*        String str1 = "sdfjsa;dkfj;akdfj;kajjjdf;";
-        Map<String, Long> get =str1.chars()
+        String str1a = "sdfjsa;dkfj;akdfj;kajjjdf;";
+        Map<String, Long> get =str1a.chars()
                 .mapToObj(i-> String.valueOf(Character.toChars(i)))
                 .collect(
                         Collectors.groupingBy(Function.identity(),Collectors.counting())
@@ -171,7 +171,7 @@ public class TestA {
                     .get()
                     .getKey();
         System.out.println(get);
-        System.out.println(max);*/
+        System.out.println(max);
 
         // Find the maximum repeating word
         String[] words = {"hello","world","morning","abc","hello","abc","hello"};
@@ -349,6 +349,42 @@ public class TestA {
         String commons = CommonCharsFinder.findCommonChars(ss1, ss2);
         System.out.println(commons);
 
+        List<String> list3 = Arrays.asList("1","2","3","4","5","6");
+        List<String> return3 = list3.stream().filter(i-> Integer.parseInt(i)%2 ==0).collect(Collectors.toList());
+        System.out.println(return3);
+        //input "1234567890"
+        //output "******7890"
+        String inputNum = "1234567890";
+        String outputNum = inputNum.chars()
+                .mapToObj(c-> inputNum.indexOf(c)<inputNum.length()-4? "*": String.valueOf((char)c))
+                .peek(c-> System.out.println(c))
+                .reduce("", (string1,string2)-> string1+string2);
+        System.out.println(outputNum);
+
+        String nonRepeatFirstChar = "asdfasdfsadfasdfiwe";
+        Map<Integer, Long> tempChars = nonRepeatFirstChar.chars()
+                .mapToObj(Integer::new)
+                .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+        for (int ind =0; ind<nonRepeatFirstChar.length();ind++){
+            if (tempChars.get(Integer.valueOf(nonRepeatFirstChar.charAt(ind))).intValue()==1) {
+                System.out.println((char)nonRepeatFirstChar.charAt(ind));
+                break;
+            }
+            else if (ind== nonRepeatFirstChar.length()-1){
+                System.out.println("_");
+            }
+        }
+
+        //max_sum of subarray [-2,2,5,-11,0,6] result 7
+        int[] inputArr = new int[] {-2,2,5,-11,0,6};
+        int cur = inputArr[0];
+        int max_sum = cur;
+        for (int i=1; i<inputArr.length;i++){
+            cur = Math.max(cur+ inputArr[i], inputArr[i]);
+            max_sum = Math.max(max_sum,cur);
+        }
+        System.out.println(cur);
+        System.out.println(max_sum);
 
 }
 

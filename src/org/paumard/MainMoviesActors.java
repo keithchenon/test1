@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -186,5 +188,13 @@ public class MainMoviesActors {
 
         long numberOfActors1 = movies.stream().flatMap(movie -> movie.actors().stream()).distinct().count();
         System.out.println(numberOfActors1);
+
+        Pattern namePattern = Pattern.compile("^W(\\S*)r$");
+        String actorList = result1.entrySet().stream()
+                .filter(entry-> "Frank".equalsIgnoreCase(entry.getKey().firstName) && namePattern.matcher(entry.getKey().lastName()).matches())
+                .map(entry->entry.getKey().firstName+" "+ entry.getKey().lastName)
+                .collect(StringBuilder::new, (sb,s)->sb.append(s+","), StringBuilder::append).toString();
+        System.out.println("Frank:"+actorList);
+
     }
 }
