@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.Comparator;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -196,5 +197,22 @@ public class MainMoviesActors {
                 .collect(StringBuilder::new, (sb,s)->sb.append(s+","), StringBuilder::append).toString();
         System.out.println("Frank:"+actorList);
 
+        ConcurrentHashMap<Movie,Set<Actor>> moviesMap = movies.stream()
+                .collect(ConcurrentHashMap::new, (map, movie)-> map.putIfAbsent(movie, movie.actors()), (map1,map2)-> map2.entrySet().stream().forEach(
+                        entry-> map1.putIfAbsent(entry.getKey(), entry.getValue())
+                ));
+        System.out.println("movies set size:"+ movies.size());
+        System.out.println("movies map size:"+ moviesMap.size());
+        int mostActorForOneMovieNum = moviesMap.reduce(10, (movie, actors)-> actors.size(), Integer::max);
+        System.out.println(mostActorForOneMovieNum);
+        ConcurrentHashMap<Actor,Set<Movie>> actorMap = movies.stream()
+                .collect(ConcurrentHashMap::new, (map, movie)-> movie.actors().stream().forEach(
+                        actor-> map.computeIfAbsent(actor, (unused)->new HashSet<Movie>()).add(movie)), (map1,map2)-> map2.entrySet().stream().forEach(
+                        entry-> map1.putIfAbsent(entry.getKey(), entry.getValue())
+                ));
+        int mostViewedActorMovieNum = actorMap.reduce(10, (movie, actors)-> actors.size(), Integer::max);
+        System.out.println(mostViewedActorMovieNum);
+        String actorName= actorMap.search(10,(actor,mv)-> mv.size()==mostViewedActorMovieNum? actor.firstName: null);
+        System.out.println(actorName);
     }
 }
