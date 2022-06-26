@@ -24,6 +24,10 @@ public class AsyncExampleMultiBranchEither {
 			return Arrays.asList(1L, 2L, 3L);
 		};
 
+		Supplier<List<Long>> supplyIDs2 = () -> {
+			sleep(200);
+			return Arrays.asList(4L, 5L, 6L);
+		};
 
 		Function<List<Long>, CompletableFuture<List<User>>> fetchUsers1 = ids -> { 
 			sleep(150);
@@ -42,15 +46,16 @@ public class AsyncExampleMultiBranchEither {
 		Consumer<List<User>> displayer = users -> users.forEach(System.out::println); 
 		
 		CompletableFuture<List<Long>> completableFuture = CompletableFuture.supplyAsync(supplyIDs);
-		
+		CompletableFuture<List<Long>> completableFuture2 = CompletableFuture.supplyAsync(supplyIDs2);
 		CompletableFuture<List<User>> users1 = completableFuture.thenComposeAsync(fetchUsers1);
-		CompletableFuture<List<User>> users2 = completableFuture.thenComposeAsync(fetchUsers2);
+		CompletableFuture<List<User>> users2 = completableFuture2.thenComposeAsync(fetchUsers2);
 		
 		users1.thenRun(() -> System.out.println("Users 1"));
 		users2.thenRun(() -> System.out.println("Users 2"));
 		
-		users1.acceptEither(users2, displayer);
-		
+//		users1.acceptEither(users2, displayer);
+		users1.thenAcceptBoth(users2, (u1,u2)-> {u1.forEach(System.out::println);
+		u2.forEach(System.out::println);});
 		sleep(6_000);
 		executor1.shutdown();
 	}

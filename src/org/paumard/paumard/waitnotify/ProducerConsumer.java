@@ -66,7 +66,7 @@ public class ProducerConsumer {
 			System.out.println("Done producing");
 		};
 		Runnable consumeTask = () -> {
-			for (int i = 0 ; i < 45 ; i++) {
+			for (int i = 0 ; i < 50 ; i++) {
 				consumer.consume();
 			}
 			System.out.println("Done consuming");

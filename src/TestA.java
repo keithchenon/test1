@@ -58,7 +58,7 @@ public class TestA {
        System.out.println(out1);
 
         //water pool calc
-/*        int[] waterPool = {0,2,4,0,2,1,2,6,1};
+        int[] waterPool = {0,2,4,0,2,1,2,6,1};
         int[] border = Arrays.stream(waterPool)
                                 .mapToObj(Integer::new)
                                 .sorted(Comparator.reverseOrder())
@@ -91,7 +91,7 @@ public class TestA {
         int waterVolume = Arrays.stream(waterPoolWithBorder)
                             .map(a-> border[1]-a)
                             .sum();
-        System.out.println(waterVolume);*/
+        System.out.println(waterVolume);
 
         /*        int primeNumber= 4;
         boolean notPrimeNumberFlag =false;
@@ -185,7 +185,8 @@ public class TestA {
                                     );
         String maxWord = counts.entrySet()
                             .stream()
-                            .max((e1,e2)-> e1.getValue().compareTo(e2.getValue()))
+//                            .max((e1,e2)-> e1.getValue().compareTo(e2.getValue()))
+                            .max(Map.Entry.comparingByValue())
                             .get()
                             .getKey();
         System.out.println(maxWord);
@@ -233,7 +234,6 @@ public class TestA {
         sj.add("abc");
         sj.add("def");
         sj.add("gh");
-        System.out.println(sj.toString());
 
 /*
         Write a program to remove the Duplicate numbers from an input Array Example
@@ -284,7 +284,8 @@ public class TestA {
         List<String> names= Arrays.asList("abc","peter","jothson","amy","keith");
         ToIntFunction<String> toLength = s->s.length();
         Comparator cmp = Comparator.comparingInt(toLength);
-        names.sort(cmp);
+ //       names.sort(cmp);
+        names.sort(Comparator.comparing(String::length));
         System.out.println(names);
 
 
